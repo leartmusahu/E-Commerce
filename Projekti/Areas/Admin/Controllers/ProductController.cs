@@ -1,21 +1,22 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-
 using Project.DataAcess.Data;
+using Project.DataAcess.Data.Repository.IRepository;
 using Project.Models;
 
-namespace Project.Controllers
+namespace Projekti.Areas.Admin.Controllers
 {
-    public class CategoryController : Controller
+    [Area("Admin")]
+    public class ProductController : Controller
     {
-        private readonly ApplicationDbContext _db;
-        public CategoryController(ApplicationDbContext db)
+        private readonly IUnitOfWork _unitOfWork;
+        public ProductController(IUnitOfWork unitOfWork)
         {
-            _db = db;
+            _unitOfWork = unitOfWork;
         }
         public IActionResult Index()
         {
-            List<Category> objCategoryList = _db.Categories.ToList();
-            return View(objCategoryList);
+            List<Product> objProductList = _unitOfWork.Product.GetAll().ToList();
+            return View(objProductList);
         }
 
 
@@ -24,47 +25,41 @@ namespace Project.Controllers
             return View();
         }
         [HttpPost]
-        public IActionResult Create(Category obj)
+        public IActionResult Create(Product obj)
         {
-            if (obj.Name == obj.DisplayOrder.ToString())
-            {
-                ModelState.AddModelError("name", "The DisplayOrder cannot exactly match the Name.");
-            }
-
-
             if (ModelState.IsValid)
             {
-                _db.Categories.Add(obj);
-                _db.SaveChanges();
-                TempData["success"] = "Category created successfully";
+                _unitOfWork.Product.Add(obj);
+                _unitOfWork.Save();
+                TempData["success"] = "Product created successfully";
                 return RedirectToAction("Index");
             }
             return View();
-            
+
         }
 
         public IActionResult Edit(int? id)
         {
-            if(id== null || id==0)
+            if (id == null || id == 0)
             {
                 return NotFound();
             }
-            Category? categoryFromDb = _db.Categories.Find(id);
-         
-            if (categoryFromDb == null)
+            Product? productFromDb = _unitOfWork.Product.Get(u => u.Id == id);
+
+            if (productFromDb == null)
             {
                 return NotFound();
             }
-                return View(categoryFromDb);
+            return View(productFromDb);
         }
         [HttpPost]
-        public IActionResult Edit(Category obj)
+        public IActionResult Edit(Product obj)
         {
-         
+
             if (ModelState.IsValid)
             {
-                _db.Categories.Update(obj);
-                _db.SaveChanges();
+                _unitOfWork.Product.Update(obj);
+                _unitOfWork.Save();
                 TempData["success"] = "Category edited successfully";
                 return RedirectToAction("Index");
             }
@@ -78,7 +73,7 @@ namespace Project.Controllers
             {
                 return NotFound();
             }
-            Category? categoryFromDb = _db.Categories.Find(id);
+            Product? categoryFromDb = _unitOfWork.Product.Get(u => u.Id == id);
 
             if (categoryFromDb == null)
             {
@@ -90,13 +85,13 @@ namespace Project.Controllers
 
         public IActionResult DeletePOST(int? id)
         {
-            Category? obj = _db.Categories.Find(id);
-            if(obj == null)
+            Product? obj = _unitOfWork.Product.Get(u => u.Id == id);
+            if (obj == null)
             {
-            return NotFound();
+                return NotFound();
             }
-            _db.Categories.Remove(obj);
-            _db.SaveChanges();
+            _unitOfWork.Product.Remove(obj);
+            _unitOfWork.Save();
             TempData["success"] = "Category deleted successfully";
             return RedirectToAction("Index");
 
