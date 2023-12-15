@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-using Projekti.Models;
+using Project.Models;
 using System.Diagnostics;
 
 namespace Projekti.Controllers

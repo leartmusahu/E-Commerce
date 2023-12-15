@@ -4,11 +4,11 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Projekti.Data;
+using Project.DataAcess.Data;
 
 #nullable disable
 
-namespace Projekti.Migrations
+namespace Project.DataAcess.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
     [Migration("20231117004404_AddCategoryTableToDb")]

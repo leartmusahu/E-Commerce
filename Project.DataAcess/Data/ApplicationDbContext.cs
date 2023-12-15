@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Projekti.Models;
+using Project.Models;
 
-namespace Projekti.Data
+namespace Project.DataAcess.Data
 {
     public class ApplicationDbContext : DbContext
     {
