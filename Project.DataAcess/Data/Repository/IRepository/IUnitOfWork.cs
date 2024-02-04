@@ -10,6 +10,7 @@ namespace Project.DataAcess.Data.Repository.IRepository
     {
         IProductRepository Product { get; }
         ICategoryRepository Category { get; }
+        ICompanyRepository Company { get; }
 
 
         void Save();

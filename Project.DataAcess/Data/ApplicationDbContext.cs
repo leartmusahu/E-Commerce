@@ -1,9 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Project.Models;
 
 namespace Project.DataAcess.Data
 {
-    public class ApplicationDbContext : DbContext
+    public class ApplicationDbContext : IdentityDbContext<IdentityUser>
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
@@ -11,14 +13,23 @@ namespace Project.DataAcess.Data
         }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Product> Products { get; set; }
-
+        public DbSet<Company>  Companies { get; set; }
+        public DbSet<ApplicationUser> ApplicationUsers { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+
+            base.OnModelCreating(modelBuilder);
+
             modelBuilder.Entity<Category>().HasData(
                 new Category { Id = 1, Name = "Action", DisplayOrder = 1 },
                 new Category { Id = 2, Name = "SciFi", DisplayOrder = 2 },
                 new Category { Id = 3, Name = "History", DisplayOrder = 3 }
                 );
+            modelBuilder.Entity<Company>().HasData(
+               new Company { Id = 1, Name = "Ric Company", StreetAddress = "123 Ros St." , City = "Chicago" , PostalCode = "123123" , State = "Chicago" , PhoneNumber="123131313" },
+               new Company { Id = 2, Name = "Teco Company", StreetAddress = "123 Abe St.", City = "New York", PostalCode = "121423", State = "NY", PhoneNumber = "12345313" },
+               new Company { Id = 3, Name = "Loka Company", StreetAddress = "123 Piro St.", City = "Ill", PostalCode = "121223", State = "IL", PhoneNumber = "12310013" }
+               );
 
 
             modelBuilder.Entity<Product>().HasData(
